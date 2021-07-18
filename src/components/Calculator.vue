@@ -1,7 +1,7 @@
 <template>
   <div class="calculator">
     <!-- Display !-->
-    <div class="display">
+    <div class="display">      
       <div class="operation">{{operationString}}</div>
       <div>{{currentNumber || '0'}}</div>
     </div>
@@ -37,7 +37,9 @@ export default {
       previousNumber: null,
       currentNumber: '0', 
       operator: null,
-      isOperating: false     
+      isOperating: false,
+      resetString: false,
+      resetOperation: false          
     }
   },
 
@@ -47,10 +49,10 @@ export default {
       this.operationString = '';
     },
 
-    sign() {
+    sign() {    
       if(this.currentNumber != '0')
         this.currentNumber = this.currentNumber.charAt(0) === '-' ? 
-        this.currentNumber.slice(1) : `${'-'}${this.currentNumber}`;
+        this.currentNumber.slice(1) : `${'-'}${this.currentNumber}`;      
     },
 
     percent() {
@@ -59,10 +61,18 @@ export default {
 
     dot() {
       if(this.currentNumber.indexOf('.') === -1)
-        this.appendNumber('.');
+        if(this.currentNumber == '0')
+          this.appendNumber('0.');
+        else
+          this.appendNumber('.');
     },
 
     appendString(string) {
+      if(this.resetString){
+        this.operationString = '';
+        this.resetString = false;
+      } 
+
       this.operationString = `${this.operationString}${string}`;
     },
 
@@ -75,8 +85,12 @@ export default {
         this.isOperating = false;
       }
 
-      this.currentNumber = `${this.currentNumber}${number}`;
-      this.appendString(number);
+      if(this.resetOperation) {
+        this.currentNumber = '';
+        this.resetOperation = false;
+      }
+
+      this.currentNumber = `${this.currentNumber}${number}`;      
     },    
 
     setPreviousNumber() {
@@ -87,33 +101,36 @@ export default {
     divide() {
       this.operator = (x, y) => x / y;
       this.setPreviousNumber();
-      this.appendString(' / ');
+      this.appendString(`${this.currentNumber} ÷ `);
     },
 
     times() {
       this.operator = (x, y) => x * y;
       this.setPreviousNumber();
-      this.appendString(' x ');
+      this.appendString(`${this.currentNumber} x `);
     },
 
-    minus() {
+    minus() { 
       this.operator = (x, y) => x - y;
       this.setPreviousNumber();
-      this.appendString(' - ');
+      this.appendString(`${this.currentNumber} - `);
     },
 
-    plus() {
+    plus() {      
       this.operator = (x, y) => x + y;
       this.setPreviousNumber();
-      this.appendString(' + ');
+      this.appendString(`${this.currentNumber} + `);
     },
 
     equal() {
+      this.operationString = `${this.operationString}${this.currentNumber} = `
       this.currentNumber = `${this.operator(
         parseFloat(this.previousNumber),
         parseFloat(this.currentNumber)
       )}`;
       this.previousNumber = null;
+      this.resetString = true;
+      this.resetOperation = true;
     }
   }
 }
