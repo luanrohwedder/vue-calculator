@@ -2,7 +2,11 @@
 
 This is a simple calculator using vue. May have some minors bugs. 
 
-### Compiles and hot-reloads for development
+###Link to the site
+https://vue-calculator.onrender.com/
+
+
+### Run in your PC
 ```
 npm run serve
 ```
