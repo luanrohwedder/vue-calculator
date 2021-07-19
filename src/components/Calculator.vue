@@ -7,25 +7,25 @@
     </div>
 
     <!-- Buttons !-->
-    <div @click="clear" class="btn">C</div>
-    <div @click="sign" class="btn">+/-</div>
-    <div class="btn">%</div>
-    <div @click="divide" class="btn operator">/</div>
-    <div @click="appendNumber('7')" class="btn">7</div>
-    <div @click="appendNumber('8')" class="btn">8</div>
-    <div @click="appendNumber('9')" class="btn">9</div>
-    <div @click="times" class="btn operator">x</div>
-    <div @click="appendNumber('4')" class="btn">4</div>
-    <div @click="appendNumber('5')" class="btn">5</div>
-    <div @click="appendNumber('6')" class="btn">6</div>
-    <div @click="minus" class="btn operator">-</div>
-    <div @click="appendNumber('1')" class="btn">1</div>
-    <div @click="appendNumber('2')" class="btn">2</div>
-    <div @click="appendNumber('3')" class="btn">3</div>
-    <div @click="plus" class="btn operator">+</div>
-    <div @click="appendNumber('0')" class="btn zero">0</div>
-    <div @click="dot" class="btn">.</div>
-    <div @click="equal" class="btn operator">=</div>
+    <button v-on:click="clear" class="btne">C</button> 
+    <button v-on:click="sign" class="btne">+/-</button> 
+    <button  class="btne">%</button> 
+    <button v-on:click="divide" class="btne operator">÷</button> 
+    <button v-on:click="appendNumber('7')" class="btne">7</button> 
+    <button v-on:click="appendNumber('8')" class="btne">8</button> 
+    <button v-on:click="appendNumber('9')" class="btne">9</button> 
+    <button v-on:click="times" class="btne operator">x</button> 
+    <button v-on:click="appendNumber('4')" class="btne">4</button> 
+    <button v-on:click="appendNumber('5')" class="btne">5</button> 
+    <button v-on:click="appendNumber('6')" class="btne">6</button> 
+    <button v-on:click="minus" class="btne operator">-</button>
+    <button v-on:click="appendNumber('1')" class="btne">1</button> 
+    <button v-on:click="appendNumber('2')" class="btne">2</button> 
+    <button v-on:click="appendNumber('3')" class="btne">3</button> 
+    <button v-on:click="plus" class="btne operator">+</button>
+    <button v-on:click="appendNumber('0')" class="btne zero">0</button> 
+    <button v-on:click="dot" class="btne">.</button>
+    <button v-on:click="equal" class="btne operator">=</button>    
   </div>
 </template>
 
@@ -144,8 +144,7 @@ export default {
     padding: 6px;
     display: grid;
     width: 300px;
-    font-size: 35px;
-    color: rgb(96, 210, 255);
+    font-size: 35px;    
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: minmax(50px, auto);
   }
@@ -168,8 +167,32 @@ export default {
     background-color: rgb(3, 71, 199);
   }
 
-  .operator {
-    background-color:rgb(25, 149, 207);
+  .btne {
+    margin: 6px;
+    box-shadow:inset 0px 1px 0px 0px #54a3f7;
+    background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
+    background-color:#007dc1;
+    border-radius:3px;
+    border:1px solid #124d77;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:25px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #154682;    
+  }
+
+  .btne:hover {
+    background:linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
+    background-color:#0061a7;
+  }
+  .btne:active {
+    position:relative;
+    top:1px;
+  }
+
+  .operator {    
     color: black;
   }
 
