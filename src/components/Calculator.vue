@@ -1,7 +1,7 @@
 <template>
   <div class="calculator">
     <!-- Display !-->
-    <div class="display">      
+    <div class="display">          
       <div class="operation">{{operationString}}</div>
       <div>{{currentNumber || '0'}}</div>
     </div>
@@ -39,7 +39,9 @@ export default {
       operator: null,
       isOperating: false,
       resetString: false,
-      resetOperation: false          
+      resetOperation: false,
+      afterDotLimit: 0,
+      numberLimit: 0      
     }
   },
 
@@ -47,6 +49,8 @@ export default {
     clear() {
       this.currentNumber = '0';
       this.operationString = '';
+      this.numberLimit = 0;
+      this.afterDotLimit = 0;
     },
 
     sign() {    
@@ -89,13 +93,26 @@ export default {
         this.currentNumber = '';
         this.resetOperation = false;
       }
-
-      this.currentNumber = `${this.currentNumber}${number}`;      
+      
+      //if the number is less then 8
+      if(this.numberLimit < 8 && this.currentNumber.indexOf('.') === -1) {        
+        this.currentNumber = `${this.currentNumber}${number}`;
+        this.numberLimit++;             
+      }//if the number is less then 8 and number is dot
+      else if(this.numberLimit == 8 && number == '.') {
+        this.currentNumber = `${this.currentNumber}${number}`;
+      }//if the number has dot
+      else if(this.afterDotLimit < 4 && this.currentNumber.indexOf('.') !== -1) {
+        this.currentNumber = `${this.currentNumber}${number}`;
+        this.afterDotLimit++
+      }
     },    
 
     setPreviousNumber() {
       this.previousNumber = this.currentNumber;
       this.isOperating = true;
+      this.numberLimit = 0;
+      this.afterDotLimit = 0;      
     },
 
     divide() {
@@ -128,9 +145,37 @@ export default {
         parseFloat(this.previousNumber),
         parseFloat(this.currentNumber)
       )}`;
+      
+      this.verifyNumber()
+
       this.previousNumber = null;
       this.resetString = true;
       this.resetOperation = true;
+      this.numberLimit = 0;
+      this.afterDotLimit = 0;
+    },
+
+    verifyNumber() {
+      //if the number has no dot
+      if(this.currentNumber.indexOf('.') === -1){
+        if(this.currentNumber.length > 8)
+          this.currentNumber = "Too Big";        
+      }
+      else {
+        if(this.currentNumber.length > 13)
+          this.currentNumber = "Too Big";
+        else {
+          let dotPoint = this.currentNumber.indexOf('.');
+          let afterDot = 0;
+  
+          for(let i = dotPoint; i < this.currentNumber.length; i++)
+            afterDot +=  1;
+  
+          //if have less numbe then 4 after the dot
+          if(afterDot > 4)
+            this.currentNumber = parseFloat(this.currentNumber).toFixed(4);        
+        }
+      }      
     }
   }
 }
@@ -158,13 +203,7 @@ export default {
   }  
 
   .operation {      
-    font-size: 20px;
-  }
-
-  .btn {
-    margin: 6px;
-    border: 1px solid rgb(13, 0, 128);
-    background-color: rgb(3, 71, 199);
+    font-size: 18px;
   }
 
   .btne {
