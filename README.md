@@ -1,24 +1,12 @@
-# vue-calculator
+# Vue Calculator
 
-## Project setup
-```
-npm install
-```
+This is a simple calculator using vue. May have some minors bugs. 
 
-### Compiles and hot-reloads for development
+### Link to the site
+https://vue-calculator.onrender.com/
+
+
+### Run in your PC
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
