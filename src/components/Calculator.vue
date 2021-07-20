@@ -7,9 +7,8 @@
     </div>
 
     <!-- Buttons !-->
-    <button v-on:click="clear" class="btne">C</button> 
+    <button v-on:click="clear" class="btne zero">C</button> 
     <button v-on:click="sign" class="btne">+/-</button> 
-    <button  class="btne">%</button> 
     <button v-on:click="divide" class="btne operator">÷</button> 
     <button v-on:click="appendNumber('7')" class="btne">7</button> 
     <button v-on:click="appendNumber('8')" class="btne">8</button> 
