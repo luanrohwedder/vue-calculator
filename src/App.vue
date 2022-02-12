@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>Vue Calculator</h1>
     <Calculator/>
     <Advice/>
   </div>
@@ -19,12 +20,29 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat-VariableFont_wght.ttf");
+}
+
+
+* {
+  font-family: "Montserrat", monospace;      
+}
+
+body {
+  margin: 0
+}
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;  
-  margin-top: 60px;  
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: rgb(211, 211, 211);
+  background: linear-gradient(to right, rgb(44, 62, 80), rgb(52, 152, 219));
 }
+
 </style>

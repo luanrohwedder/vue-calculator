@@ -17,12 +17,11 @@ export default {
 
 <style>
   .Advice {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    background-color: blanchedalmond;
     margin: 0 auto;
     width: 350px;
     margin-top: 20px;
-    border: 5px solid #1C6EA4;
+    border-top: 2px solid #424242;
+    border-bottom: 2px solid #424242;
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 20px;

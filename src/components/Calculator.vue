@@ -1,240 +1,145 @@
 <template>
-  <div class="calculator">
-    <!-- Display !-->
-    <div class="display">          
-      <div class="operation">{{operationString}}</div>
-      <div>{{currentNumber || '0'}}</div>
+  <div>
+    <div>
+      <Display class="mini" mini :value="miniDisplay"/>            
     </div>
 
-    <!-- Buttons !-->
-    <button v-on:click="clear" class="btne zero">C</button> 
-    <button v-on:click="sign" class="btne">+/-</button> 
-    <button v-on:click="divide" class="btne operator">÷</button> 
-    <button v-on:click="appendNumber('7')" class="btne">7</button> 
-    <button v-on:click="appendNumber('8')" class="btne">8</button> 
-    <button v-on:click="appendNumber('9')" class="btne">9</button> 
-    <button v-on:click="times" class="btne operator">x</button> 
-    <button v-on:click="appendNumber('4')" class="btne">4</button> 
-    <button v-on:click="appendNumber('5')" class="btne">5</button> 
-    <button v-on:click="appendNumber('6')" class="btne">6</button> 
-    <button v-on:click="minus" class="btne operator">-</button>
-    <button v-on:click="appendNumber('1')" class="btne">1</button> 
-    <button v-on:click="appendNumber('2')" class="btne">2</button> 
-    <button v-on:click="appendNumber('3')" class="btne">3</button> 
-    <button v-on:click="plus" class="btne operator">+</button>
-    <button v-on:click="appendNumber('0')" class="btne zero">0</button> 
-    <button v-on:click="dot" class="btne">.</button>
-    <button v-on:click="equal" class="btne operator">=</button>    
+    <div class="calculator">
+    
+    <Display :value="displayValue"/>    
+
+    <Button label="C" double @onClick="clear"/>
+    <Button label="+/-" @onClick="addSign"/>
+    <Button label="/" operation @onClick="addOperation"/>
+    <Button label="7" @onClick="addNumber" />
+    <Button label="8" @onClick="addNumber"/>
+    <Button label="9" @onClick="addNumber"/>
+    <Button label="*" operation @onClick="addOperation"/>
+    <Button label="4" @onClick="addNumber"/>
+    <Button label="5" @onClick="addNumber"/>
+    <Button label="6" @onClick="addNumber"/>
+    <Button label="-" operation @onClick="addOperation"/>
+    <Button label="1" @onClick="addNumber"/>
+    <Button label="2" @onClick="addNumber"/>
+    <Button label="3" @onClick="addNumber"/>
+    <Button label="+" operation @onClick="addOperation"/>
+    <Button label="0" double @onClick="addNumber"/>
+    <Button label="." @onClick="addNumber"/>
+    <Button label="=" operation @onClick="addOperation"/>     
+  </div>
   </div>
 </template>
 
 <script>
+import Button from "./Button.vue"
+import Display from "./Display.vue"
+
 export default {
+  components: {
+    Button, Display
+  },
+
   data(){
     return{
-      operationString: '',
-      previousNumber: null,
-      currentNumber: '0', 
-      operator: null,
-      isOperating: false,
-      resetString: false,
-      resetOperation: false,
-      afterDotLimit: 0,
-      numberLimit: 0      
+      miniDisplay: "",
+      displayValue: "0",
+      clearDisplay: false,
+      op: null,
+      values: [0,0],
+      current: 0
     }
   },
 
-  methods: {
+  methods: {    
     clear() {
-      this.currentNumber = '0';
-      this.operationString = '';
-      this.numberLimit = 0;
-      this.afterDotLimit = 0;
+      Object.assign(this.$data, this.$options.data())
     },
 
-    sign() {    
-      if(this.currentNumber != '0')
-        this.currentNumber = this.currentNumber.charAt(0) === '-' ? 
-        this.currentNumber.slice(1) : `${'-'}${this.currentNumber}`;      
-    },
-
-    percent() {
-      //TODO
-    },
-
-    dot() {
-      if(this.currentNumber.indexOf('.') === -1)
-        if(this.currentNumber == '0')
-          this.appendNumber('0.');
-        else
-          this.appendNumber('.');
-    },
-
-    appendString(string) {
-      if(this.resetString){
-        this.operationString = '';
-        this.resetString = false;
-      } 
-
-      this.operationString = `${this.operationString}${string}`;
-    },
-
-    appendNumber(number) {
-      if(this.currentNumber == '0' && number != '.')
-        this.currentNumber = '';
-
-      if(this.isOperating) {
-        this.currentNumber = '';
-        this.isOperating = false;
-      }
-
-      if(this.resetOperation) {
-        this.currentNumber = '';
-        this.resetOperation = false;
-      }
-      
-      //if the number is less then 8
-      if(this.numberLimit < 8 && this.currentNumber.indexOf('.') === -1) {        
-        this.currentNumber = `${this.currentNumber}${number}`;
-        this.numberLimit++;             
-      }//if the number is less then 8 and number is dot
-      else if(this.numberLimit == 8 && number == '.') {
-        this.currentNumber = `${this.currentNumber}${number}`;
-      }//if the number has dot
-      else if(this.afterDotLimit < 4 && this.currentNumber.indexOf('.') !== -1) {
-        this.currentNumber = `${this.currentNumber}${number}`;
-        this.afterDotLimit++
-      }
-    },    
-
-    setPreviousNumber() {
-      this.previousNumber = this.currentNumber;
-      this.isOperating = true;
-      this.numberLimit = 0;
-      this.afterDotLimit = 0;      
-    },
-
-    divide() {
-      this.operator = (x, y) => x / y;
-      this.setPreviousNumber();
-      this.appendString(`${this.currentNumber} ÷ `);
-    },
-
-    times() {
-      this.operator = (x, y) => x * y;
-      this.setPreviousNumber();
-      this.appendString(`${this.currentNumber} x `);
-    },
-
-    minus() { 
-      this.operator = (x, y) => x - y;
-      this.setPreviousNumber();
-      this.appendString(`${this.currentNumber} - `);
-    },
-
-    plus() {      
-      this.operator = (x, y) => x + y;
-      this.setPreviousNumber();
-      this.appendString(`${this.currentNumber} + `);
-    },
-
-    equal() {
-      this.operationString = `${this.operationString}${this.currentNumber} = `
-      this.currentNumber = `${this.operator(
-        parseFloat(this.previousNumber),
-        parseFloat(this.currentNumber)
-      )}`;
-      
-      this.verifyNumber()
-
-      this.previousNumber = null;
-      this.resetString = true;
-      this.resetOperation = true;
-      this.numberLimit = 0;
-      this.afterDotLimit = 0;
-    },
-
-    verifyNumber() {
-      //if the number has no dot
-      if(this.currentNumber.indexOf('.') === -1){
-        if(this.currentNumber.length > 8)
-          this.currentNumber = "Too Big";        
+    addOperation(op) {
+      if(this.current === 0) {
+        this.op = op
+        this.current = 1
+        this.clearDisplay = true
+        this.miniDisplay = this.displayValue + " " + this.op
       }
       else {
-        if(this.currentNumber.length > 13)
-          this.currentNumber = "Too Big";
-        else {
-          let dotPoint = this.currentNumber.indexOf('.');
-          let afterDot = 0;
-  
-          for(let i = dotPoint; i < this.currentNumber.length; i++)
-            afterDot +=  1;
-  
-          //if have less numbe then 4 after the dot
-          if(afterDot > 4)
-            this.currentNumber = parseFloat(this.currentNumber).toFixed(4);        
+        const equal = op === "="
+        const currentOp = this.op
+        const firstValue = this.values[0]
+        const secondValue = this.values[1]
+
+        try {
+          this.values[0] = eval(`${this.values[0]} ${currentOp} ${this.values[1]}`)
+          
+          if (isNaN(this.values[0]) || !isFinite(this.values[0])) {
+            this.clear();
+            return;
+          }
+        } catch(e) {
+          this.$emit('onError', e)
         }
-      }      
+        
+        this.values[1] = 0
+
+        this.displayValue = this.values[0]
+        this.miniDisplay = equal ? firstValue + " " + this.op + " " + secondValue + " =" : this.values[0] + " " + this.op
+        this.op = equal ? null : op
+        this.current = equal ? 0 : 1
+        this.clearDisplay = !equal
+      }
+    },
+
+    addNumber(n) {
+      if(n == "." && this.displayValue.includes(".")) {
+        return
+      }
+
+      const clearDisplay = this.displayValue === "0" || this.clearDisplay
+      const currentValue = clearDisplay ? "" : this.displayValue
+      const displayValue = currentValue + n
+
+      this.displayValue = displayValue
+      this.clearDisplay = false
+
+      if(n !== ".") {
+        const i = this.current
+        const newValue = parseFloat(displayValue)
+        this.values[i] = newValue
+      }
+    },
+
+    addSign() {      
+      if(this.displayValue.includes("-")) {      
+        this.displayValue = this.displayValue.substring(1)
+      }
+      else {
+        this.displayValue = "-" + this.displayValue
+      }
+
+      const i = this.current
+      const newValue = parseFloat(this.displayValue)
+      this.values[i] = newValue
     }
-  }
+  }  
 }
 </script>
 
 
 <style scoped>
-  .calculator {
-    background-color: rgb(20, 0, 73);
-    margin: 0 auto;
-    padding: 6px;
+  .calculator {            
     display: grid;
-    width: 300px;
-    font-size: 35px;    
-    grid-template-columns: repeat(4, 1fr);
+    height: 320px;
+    width: 270px;    
+    overflow: hidden;
+    
+    grid-template-columns: repeat(4, 25%);
     grid-auto-rows: minmax(50px, auto);
   }
-
-  .display {
-    margin: 6px;    
-    background-color: rgb(221, 221, 221);
-    text-align: right;
-    color: black;
-    grid-column: 1 / 5;
-  }  
-
-  .operation {      
-    font-size: 18px;
-  }
-
-  .btne {
-    margin: 6px;
-    box-shadow:inset 0px 1px 0px 0px #54a3f7;
-    background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
-    background-color:#007dc1;
-    border-radius:3px;
-    border:1px solid #124d77;
-    display:inline-block;
-    cursor:pointer;
-    color:#ffffff;
-    font-family:Arial;
-    font-size:25px;
-    text-decoration:none;
-    text-shadow:0px 1px 0px #154682;    
-  }
-
-  .btne:hover {
-    background:linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
-    background-color:#0061a7;
-  }
-  .btne:active {
-    position:relative;
-    top:1px;
-  }
-
-  .operator {    
-    color: black;
-  }
-
-  .zero {
-    grid-column: 1 / 3;
+  
+  .mini {    
+    display: grid;
+    overflow: hidden;    
+    height: 10px;
+    width: 250px;  
   }
 </style>
