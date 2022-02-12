@@ -2,19 +2,16 @@
   <div id="app">
     <h1>Vue Calculator</h1>
     <Calculator/>
-    <Advice/>
-  </div>
+  </div>  
 </template>
 
 <script>
 import Calculator from './components/Calculator.vue'
-import Advice from './components/Advice.vue'
 
 export default {
   name: 'App',
   components: {
-    Calculator,    
-    Advice
+    Calculator    
   }
 }
 </script>
@@ -44,5 +41,4 @@ body {
   color: rgb(211, 211, 211);
   background: linear-gradient(to right, rgb(44, 62, 80), rgb(52, 152, 219));
 }
-
 </style>
